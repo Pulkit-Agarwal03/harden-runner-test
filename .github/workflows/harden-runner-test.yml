@@ -1,0 +1,26 @@
+name: Harden Runner Test
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  test-egress:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Normal command
+        run: echo "Testing Harden-Runner in audit mode"
+
+      - name: Trigger unusual outbound call
+        run: |
+          curl -I https://example.com
+          curl -I https://icanhazip.com
